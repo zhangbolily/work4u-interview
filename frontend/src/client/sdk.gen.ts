@@ -23,6 +23,10 @@ import type {
   LoginResetPasswordResponse,
   LoginRecoverPasswordHtmlContentData,
   LoginRecoverPasswordHtmlContentResponse,
+  MeetingDigestData,
+  MeetingDigestResponse,
+  MeetingReadMeetingHistoryData,
+  MeetingReadMeetingHistoryResponse,
   PrivateCreateUserData,
   PrivateCreateUserResponse,
   UsersReadUsersData,
@@ -266,6 +270,55 @@ export class LoginService {
       url: "/api/v1/password-recovery-html-content/{email}",
       path: {
         email: data.email,
+      },
+      errors: {
+        422: "Validation Error",
+      },
+    })
+  }
+}
+
+export class MeetingService {
+  /**
+   * Digest
+   * Digest meeting minutes.
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @returns MeetingMinutesDigest Successful Response
+   * @throws ApiError
+   */
+  public static digest(
+    data: MeetingDigestData,
+  ): CancelablePromise<MeetingDigestResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/meeting/digest",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: "Validation Error",
+      },
+    })
+  }
+
+  /**
+   * Read Meeting History
+   * Retrieve meeting history.
+   * @param data The data for the request.
+   * @param data.skip
+   * @param data.limit
+   * @returns MeetingMinutesDigestHistory Successful Response
+   * @throws ApiError
+   */
+  public static readMeetingHistory(
+    data: MeetingReadMeetingHistoryData = {},
+  ): CancelablePromise<MeetingReadMeetingHistoryResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/meeting/history",
+      query: {
+        skip: data.skip,
+        limit: data.limit,
       },
       errors: {
         422: "Validation Error",

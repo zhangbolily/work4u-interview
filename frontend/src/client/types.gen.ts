@@ -35,6 +35,22 @@ export type ItemUpdate = {
   description?: string | null
 }
 
+export type MeetingMinutes = {
+  content: string
+}
+
+export type MeetingMinutesDigest = {
+  id?: string
+  content?: string | null
+  summary?: string | null
+  created_at?: string | null
+}
+
+export type MeetingMinutesDigestHistory = {
+  data: Array<MeetingMinutesDigest>
+  count: number
+}
+
 export type Message = {
   message: string
 }
@@ -164,6 +180,19 @@ export type LoginRecoverPasswordHtmlContentData = {
 }
 
 export type LoginRecoverPasswordHtmlContentResponse = string
+
+export type MeetingDigestData = {
+  requestBody: MeetingMinutes
+}
+
+export type MeetingDigestResponse = MeetingMinutesDigest
+
+export type MeetingReadMeetingHistoryData = {
+  limit?: number
+  skip?: number
+}
+
+export type MeetingReadMeetingHistoryResponse = MeetingMinutesDigestHistory
 
 export type PrivateCreateUserData = {
   requestBody: PrivateUserCreate

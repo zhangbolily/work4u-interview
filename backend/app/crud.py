@@ -1,10 +1,17 @@
 import uuid
-from typing import Any
+from typing import Any, List
 
-from sqlmodel import Session, select
+from sqlmodel import func, select, Session, text
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import (
+    Item,
+    ItemCreate,
+    MeetingMinutesDigest,
+    User,
+    UserCreate,
+    UserUpdate,
+)
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -52,3 +59,27 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def create_meeting_digest(
+    *, session: Session, digest: MeetingMinutesDigest
+) -> MeetingMinutesDigest:
+    db_digest = MeetingMinutesDigest.model_validate(digest)
+    session.add(db_digest)
+    session.commit()
+    session.refresh(db_digest)
+    return db_digest
+
+
+def get_meeting_digest_list(
+    *, session: Session, offset: int = 0, limit: int = 100
+) -> List[MeetingMinutesDigest]:
+    statement = (
+        select(MeetingMinutesDigest).offset(offset).limit(limit).order_by(text("created_at DESC"))
+    )
+    return list(session.exec(statement).all())
+
+
+def get_meeting_digest_count(*, session: Session) -> int:
+    statement = select(func.count()).select_from(MeetingMinutesDigest)
+    return session.exec(statement).first() or 0

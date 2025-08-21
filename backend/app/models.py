@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import List
 import uuid
 
 from pydantic import EmailStr
@@ -111,3 +113,19 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
+
+
+class MeetingMinutes(SQLModel):
+    content: str
+
+
+# Meeting minutes
+class MeetingMinutesDigest(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    content: str | None = Field(default=None)
+    summary: str | None = Field(default=None)
+    created_at: datetime | None = Field(default_factory=datetime.now)
+
+class MeetingMinutesDigestHistory(SQLModel):
+    data: List[MeetingMinutesDigest]
+    count: int

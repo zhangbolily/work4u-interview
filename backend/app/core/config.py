@@ -116,5 +116,8 @@ class Settings(BaseSettings):
 
         return self
 
+    AGENT_MODEL_NAME: str = "deepseek-chat"
+    AGENT_MODEL_API_KEY: str = ""
+
 
 settings = Settings()  # type: ignore
